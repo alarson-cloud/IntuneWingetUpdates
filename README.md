@@ -6,3 +6,7 @@ Logs output to C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\UpdateApp
 
 ![image](https://github.com/user-attachments/assets/b9b327a9-1e54-454e-bca5-6839217ca5f4)
 ![image](https://github.com/user-attachments/assets/4b62bf9a-1b0f-4a20-bc14-cf59d9cba898)
+
+Log snip looks like this: 
+
+![image](https://github.com/user-attachments/assets/f6ca4723-c8a2-484c-91df-37c307d0b2fa)
