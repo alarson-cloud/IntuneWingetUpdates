@@ -1,5 +1,5 @@
-﻿#Requires -Version 5.1
-# alarson@hbs.net - 2025-03-11
+#Requires -Version 5.1
+#alarson@hbs.net - 2025-03-11
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'SilentlyContinue'
 $InformationPreference = 'Continue'
@@ -54,29 +54,39 @@ Try{
                             }
                     }
                 }
-
                     $latest = $versionPairs | Sort-Object Parsed -Descending | Select-Object -First 1
-
                     if ($latest) {
                         Write-Output "$($app.PackageIdentifier): `n Latest Version:$($latest.Original) `n Current Version:$($app.Version)"
                             if($latest.Original -gt $app.Version) {
                                 Write-Output "$($app.PackageIdentifier) has an update"
                                 Write-Output "Attempting Update" 
-                                &$winget_exe upgrade --id $app.PackageIdentifier --silent --accept-package-agreements --accept-source-agreements --verbose-logs --log $log
+                                &$winget_exe upgrade --id $app.PackageIdentifier --silent --accept-package-agreements --accept-source-agreements --verbose-logs
                                 #Check If Upgrade worked 
                                 $wingetOutput = & $winget_exe show --id $app.PackageIdentifier 2>&1
                                 # Filter lines that look like version numbers
                                 $versionLine = $wingetOutput | Where-Object { $_ -match '^Version:\s+(.*)$' }
                                     if ($versionLine -match '^Version:\s+(.*)$') {
-                                       $currentVersion = ($line = &$winget_exe list --id $app.PackageIdentifier | Where-Object { $_ -match $app.PackageIdentifier }) -split '\s{2,}' | Select-Object -Index 1 
-                                        Write-output "Rechecking $($app.PackageIdentifier) after update `n Versions is now: $currentVersion" 
-                                            if ($currentVersion.Trim() -eq $latest.Original.Trim()) {
+                                       $line = &$winget_exe list --id $app.PackageIdentifier | Where-Object { $_ -match $app.PackageIdentifier }
+                                            if ($line) {
+                                                $columns = -split $line
+                                                $idIndex = $columns.IndexOf($app.PackageIdentifier)
+                                                    if ($idIndex -ge 0 -and $columns.Length -gt ($idIndex + 1)) {
+                                                        $currentVersion = $columns[$idIndex + 1]
+                                                        $currentVersion
+                                                    } else {
+                                                        Write-Host "Could not determine version from line: $line"
+                                                        }
+                                            } else {
+                                                Write-Host "App not found."
+                                                }
+                                        Write-output "Rechecking $($app.PackageIdentifier) after update `n Version is now: $currentVersion" 
+                                            if ($currentVersion -eq $latest.Original.Trim()) {
                                                 Write-Output "$($app.PackageIdentifier) Updated Successfully"
                                                 $exitCode = 0
                                             } else {
                                                 Write-Output "Trying Install of $($app.PackageIdentifier) instead of upgrade"
-                                                &$winget_exe install --id $app.PackageIdentifier --silent --accept-package-agreements --accept-source-agreements -s winget --force --verbose-logs --log $log
-                                                    if($version.Trim() -eq $latest.Original.Trim()) {
+                                                &$winget_exe install --id $app.PackageIdentifier --silent --accept-package-agreements --accept-source-agreements -s winget --force --verbose-logs
+                                                    if($currentVersion -eq $latest.Original.Trim()) {
                                                         Write-Output "$($app.PackageIdentifier) Updated Successfully" 
                                                         $exitCode = 0
                                                     }else { 
@@ -99,7 +109,6 @@ Try{
         } else { Write-Warning "$($app.PackageIdentifier) is excluded"
     
         }
-
     }
  } Catch {
         $errMsg = if ($_.Exception -and $_.Exception.Message) { $_.Exception.Message } else { "Unknown error occurred." }
@@ -108,5 +117,4 @@ Try{
     } Finally {
         Stop-Transcript
         exit $exitCode
-    }   
-    
+    } 
