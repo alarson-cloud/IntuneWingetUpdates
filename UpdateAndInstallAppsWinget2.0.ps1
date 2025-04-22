@@ -72,7 +72,6 @@ Try{
                                                 $idIndex = $columns.IndexOf($app.PackageIdentifier)
                                                     if ($idIndex -ge 0 -and $columns.Length -gt ($idIndex + 1)) {
                                                         $currentVersion = $columns[$idIndex + 1]
-                                                        $currentVersion
                                                     } else {
                                                         Write-Host "Could not determine version from line: $line"
                                                         }
