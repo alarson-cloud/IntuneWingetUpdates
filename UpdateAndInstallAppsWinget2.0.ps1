@@ -7,6 +7,14 @@ $exitCode = 0
 $log = "$($env:ProgramData)\Microsoft\IntuneManagementExtension\Logs\AppUpdates.log"
 Start-Transcript -Path $log -Append
 $winget_exe = Resolve-Path "$($env:ProgramFiles)\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe\winget.exe"
+if ($winget_exe.count -gt 1) {
+
+    Write-Output "Multiple Winget versions detected.`nSelecting the latest version."
+    $winget_exeLatest = $winget_exe | ForEach-Object {
+        Get-Item $_.Path
+    } | Sort-Object CreationTime -Descending | Select-Object -First 1
+    $winget_exe = $winget_exeLatest.FullName
+}
 $jsonFile = "$($env:windir)\temp\apps.txt"
     if ($jsonFile){ 
         Clear-Content $jsonFile
