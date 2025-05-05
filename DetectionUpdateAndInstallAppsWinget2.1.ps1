@@ -31,16 +31,19 @@ $allapps = Get-Content $jsonFile
             }
         }
     }
+    #Add Excluded App IDs here to Exclude them
 $excludedApps = @(
-        "Microsoft.Office"
+    "Microsoft.Office"
     )
+    #Add Included App IDs here only to update the apps in this list. Leave the included apps Blank if you want to update all available apps
 $includedApps = @(
-        "Microsoft.Edge"
+    "Microsoft.Edge"
    )
+$useInclusionFilter = $includedApps.Count -gt 0
 Try{
 Write-Output 'Detection Script started...'
     Foreach($app in $apps){
-        if (($useInclusionFilter -and $app.PackageIdentifier -in $includedApps) -and ($app.PackageIdentifier -notin $excludedApps)) {
+        if ((-not $useInclusionFilter -or $app.PackageIdentifier -in $includedApps) -and ($app.PackageIdentifier -notin $excludedApps)) {
             $versionsRaw = & $winget_exe show --versions --id $app.PackageIdentifier 2>&1
             $inVersionSection = $false
             $versionPairs = @()
