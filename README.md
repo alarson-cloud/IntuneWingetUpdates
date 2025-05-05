@@ -1,12 +1,12 @@
-Deploy as an App or Remediation script with these scripts. App already packaged and ready to upload as Win32. App version is currently set to run as a task scheduler task on Monday morning at 10 AM CST and run weekly. 
+Keep Microsoft and 3rd Party Apps up to date with Winget.
+Deploy as Remediation script with these script in Microsoft Intune.
 
-Edit the $trigger to change the time/frequency of running this scheduled task in the AppUpdatesTaskScheduler.ps1 and re-package as Win32. 
+Exclude Apps that you dont want upgraded in the $excludedApps list with the apps ID
+Include only certian apps you want upgraded in the $includedApps list. Leaving the list blank will upgrade all available winget apps except for the excluded apps list.
+Find the App ID by running winget search *appname* in powershell 
 
-Logs output to C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\UpdateApps.log after running and attempting app updates in either version. 
-
-![image](https://github.com/user-attachments/assets/b9b327a9-1e54-454e-bca5-6839217ca5f4)
-![image](https://github.com/user-attachments/assets/4b62bf9a-1b0f-4a20-bc14-cf59d9cba898)
+Logs output to C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\AppUpdates.log after running and attempting app updates in any version. 
 
 Log snip looks like this: 
 
-![image](https://github.com/user-attachments/assets/f6ca4723-c8a2-484c-91df-37c307d0b2fa)
+![alt text](image.png)
