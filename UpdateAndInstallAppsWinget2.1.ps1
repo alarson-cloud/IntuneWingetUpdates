@@ -37,7 +37,7 @@ $excludedApps = @(
     )
     #Add Included App IDs here only to update the apps in this list. Leave the included apps Blank if you want to update all available apps
 $includedApps = @(
-    "Microsoft.Edge"
+    #"Microsoft.Edge"
    )
     $useInclusionFilter = $includedApps.Count -gt 0
 Try{
