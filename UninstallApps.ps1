@@ -15,7 +15,7 @@ if($winget_exe.count -gt 1){
 	$winget_exe = $winget_exeLatest.FullName
 }
 
-	#Add Included App IDs here only to install all the apps in this list.
+		#Add Included App IDs here only to uninstall all the apps in this list.
 $includedApps = @(
 	"Adobe.Acrobat.Reader.64-bit"
 	"Zoom.Zoom"
@@ -24,7 +24,7 @@ $includedApps = @(
 Try{
 	Foreach($app in $includedApps){
 		Write-Output "Trying Install of $($app)"
-		&$winget_exe install --id $app --silent --accept-package-agreements --accept-source-agreements -s winget --force --verbose-logs
+		&$winget_exe uninstall --id $app --silent --accept-package-agreements --accept-source-agreements -s winget --force --verbose-logs
 		$jsonFile = "$($env:windir)\temp\apps.txt"
 			if($jsonFile){ 
 				Clear-Content $jsonFile
