@@ -24,7 +24,7 @@ $includedApps = @(
 Try{
 	Foreach($app in $includedApps){
 		Write-Output "Trying Install of $($app)"
-		&$winget_exe uninstall --id $app --silent --accept-package-agreements --accept-source-agreements -s winget --force --verbose-logs
+		&$winget_exe uninstall --id $app --silent --accept-source-agreements -s winget --force --verbose-logs
 		$jsonFile = "$($env:windir)\temp\apps.txt"
 			if($jsonFile){ 
 				Clear-Content $jsonFile
