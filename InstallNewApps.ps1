@@ -43,9 +43,9 @@ Try{
 					}
 				}
 			if($apps.PackageIdentifier -like $app){
-				Write-Output "$($app) was not removed correctly."
+				Write-Output "$($app) was installed successfully."
 			}else{
-				Write-Output "$($app) was uninstalled successfully."
+				Write-Output "$($app) was not detected as installed."
 			}
 	}
 }Catch{
