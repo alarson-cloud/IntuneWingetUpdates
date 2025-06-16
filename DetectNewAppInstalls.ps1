@@ -5,7 +5,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 $InformationPreference = 'Continue'
 $exitCode = 0
 $log = "$($env:ProgramData)\Microsoft\IntuneManagementExtension\Logs\DellDetection.log"
-Start-Transcript -Path $log -Append
+Start-Transcript -Path $log
 $winget_exe = Resolve-Path "$($env:ProgramFiles)\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe\winget.exe"
 if($winget_exe.count -gt 1){
 	Write-Output "Multiple Winget versions detected.`nSelecting the latest version."
