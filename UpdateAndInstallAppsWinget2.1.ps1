@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-#alarson@hbs.net - 2025-03-11
+#Prairie States - 2025-07-7
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'SilentlyContinue'
 $InformationPreference = 'Continue'
@@ -34,6 +34,7 @@ $allapps = Get-Content $jsonFile
 	#Add Excluded App IDs here to Exclude them
 $excludedApps = @(
 	"Microsoft.Office"
+	"uvncbvba.UltraVNC"
 	)
 	#Add Included App IDs here only to update the apps in this list. Leave the included apps Blank if you want to update all available apps
 $includedApps = @(
@@ -43,7 +44,7 @@ $includedApps = @(
 Try{
 	Foreach($app in $apps){
 		if((-not $useInclusionFilter -or $app.PackageIdentifier -in $includedApps) -and ($app.PackageIdentifier -notin $excludedApps)){
-			$versionsRaw = & $winget_exe show --versions --id $app.PackageIdentifier 2>&1
+			$versionsRaw = & $winget_exe show --accept-source-agreements --versions  --id $app.PackageIdentifier 2>&1
 			$inVersionSection = $false
 			$versionPairs = @()
 				foreach($line in $versionsRaw){
@@ -71,7 +72,7 @@ Try{
 								Write-Output "$($app.PackageIdentifier) has an update"
 								Write-Output "Attempting Update" 
 								&$winget_exe upgrade --id $app.PackageIdentifier --silent --accept-package-agreements --accept-source-agreements -s winget --verbose-logs
-								$wingetOutput = & $winget_exe show --id $app.PackageIdentifier 2>&1
+								$wingetOutput = & $winget_exe show --accept-source-agreements --id $app.PackageIdentifier 2>&1
 								$versionLine = $wingetOutput | Where-Object {$_ -match '^Version:\s+(.*)$'}
 									if($versionLine -match '^Version:\s+(.*)$'){
 										$line = &$winget_exe list --id $app.PackageIdentifier | Where-Object {$_ -match $app.PackageIdentifier}
@@ -93,7 +94,7 @@ Try{
 											}else{
 												Write-Output "Trying Install of $($app.PackageIdentifier) instead of upgrade"
 												&$winget_exe install --id $app.PackageIdentifier --silent --accept-package-agreements --accept-source-agreements -s winget --force --verbose-logs
-												$wingetOutput = & $winget_exe show --id $app.PackageIdentifier 2>&1
+												$wingetOutput = & $winget_exe show --accept-source-agreements --id $app.PackageIdentifier 2>&1
 												$versionLine = $wingetOutput | Where-Object {$_ -match '^Version:\s+(.*)$'}
 													if($versionLine -match '^Version:\s+(.*)$'){
 														$line = &$winget_exe list --id $app.PackageIdentifier | Where-Object {$_ -match $app.PackageIdentifier}
