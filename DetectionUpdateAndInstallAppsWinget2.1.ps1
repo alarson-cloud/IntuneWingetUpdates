@@ -44,7 +44,7 @@ Try{
 Write-Output 'Detection Script started...'
 	Foreach($app in $apps){
 		if((-not $useInclusionFilter -or $app.PackageIdentifier -in $includedApps) -and ($app.PackageIdentifier -notin $excludedApps)){
-			$versionsRaw = & $winget_exe show --versions --id $app.PackageIdentifier 2>&1
+			$versionsRaw = & $winget_exe show --accept-source-agreements --versions --id $app.PackageIdentifier 2>&1
 			$inVersionSection = $false
 			$versionPairs = @()
 				foreach($line in $versionsRaw){
